@@ -1,0 +1,22 @@
+{{#paper-card as |card|}}
+  {{#card.header as |header|}}
+    {{#header.avatar}}
+      {{paper-icon bus.directionIcon}}
+    {{/header.avatar}}
+    {{#header.text as |text|}}
+      {{#text.title}}Route# {{bus.route}}{{/text.title}}
+      {{#text.subhead}}{{bus.direction}} ({{bus.adherence}}){{/text.subhead}}
+    {{/header.text}}
+  {{/card.header}}
+
+  {{#card.title as |title|}}
+        {{#title.text as |text|}}
+          {{#text.headline}}{{bus.distanceFromUser}} miles away{{/text.headline}}
+        {{/title.text}}
+      {{/card.title}}
+      
+  {{#card.content}}
+    <p>{{bus.timePoint}}</p>
+    <sub>updated at: {{bus.msgTime}}</sub>
+  {{/card.content}}
+{{/paper-card}}
