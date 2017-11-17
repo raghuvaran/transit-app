@@ -1,0 +1,15 @@
+{{#paper-content padding=true}}
+  {{#unless trackBusesTask.isRunning}}
+    {{#paper-button raised=true fab=true onClick=(perform trackBusesTask)}}{{paper-icon 'play arrow'}}{{/paper-button}}
+  {{else}}
+    {{#paper-button raised=true fab=true onClick=(action (invoke 'cancelAll' trackBusesTask))}}{{paper-icon 'stop'}}{{/paper-button}}
+  {{/unless}}
+
+  {{#each buses as |bus|}}
+  {{log bus}}
+  <h3>Route# {{bus.route}} ({{bus.direction}})</h3>
+  <p>{{bus.distanceFromUser}} away from you</p>
+  <sub>updated at: {{bus.msgTime}}</sub>
+  {{/each}}
+  
+{{/paper-content}}

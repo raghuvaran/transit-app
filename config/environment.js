@@ -4,6 +4,7 @@
 module.exports = function(environment) {
   let ENV = {
     modulePrefix: 'transit-app',
+    podModulePrefix: 'transit-app/pods',
     environment,
     rootURL: '/',
     locationType: 'auto',
