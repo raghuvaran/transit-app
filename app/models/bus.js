@@ -17,7 +17,8 @@ const staticmap = size => ({get(){
     markers: [
       `size:tiny|color:red|${this.get('userLat')},${this.get('userLng')}`,
       `color:red|${this.get('lat')},${this.get('lng')}`,
-    ]
+    ],
+    key: 'AIzaSyAvZ7tmNKxBquUZZ_2m2jVxbGY8m4T-A9E'
 
   });
   // const blob = await fetchBlob(url);
