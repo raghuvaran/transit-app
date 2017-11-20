@@ -21,6 +21,7 @@ export default Component.extend({
   tagName: 'buses-near-me',
   busURL: `${padding}http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus`,
   requestedBuses: [
+    ["16", "southbound"],
     ["16", "northbound"],
     ["99", "northbound"],
     ["109", "northbound"],

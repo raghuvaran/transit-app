@@ -8,6 +8,23 @@ const roundOff = (value, precision) => Math.round((value) * Math.pow(10, precisi
 
 const googleStaticMapBaseURL = `https://maps.googleapis.com/maps/api/staticmap`;
 
+const staticmap = size => ({get(){
+  // https://maps.googleapis.com/maps/api/staticmap?center=33.8186363,-84.3718512&zoom=13&size=300x300&sensor=false
+  const url = URLGenerator(googleStaticMapBaseURL, {
+    // center: '33.8186363,-84.3718512',
+    // zoom: '16',
+    size,
+    markers: [
+      `size:tiny|color:red|${this.get('userLat')},${this.get('userLng')}`,
+      `color:red|${this.get('lat')},${this.get('lng')}`,
+    ]
+
+  });
+  // const blob = await fetchBlob(url);
+  // const imgUrl = window.URL.createObjectURL(blob);
+  return url;
+}});
+
 export default EmberObject.extend({
   /* Attributes */
   userLat: '33.766856',
@@ -61,7 +78,6 @@ distanceText: computed('distanceAwayFromUser', {
 }),
 
 notify: function() {
-  console.log('executing notify');
   if(this.get('shouldNotify')) {
     const title = `Route ${this.get('route')} (${this.get('direction')})`;
     const body = `Bus is ${this.get('distanceText')} from you`;
@@ -70,22 +86,9 @@ notify: function() {
   }
 }.observes('distanceAwayFromUser'),
 
-staticMapImg: computed('distanceAwayFromUser', function() {
-  // https://maps.googleapis.com/maps/api/staticmap?center=33.8186363,-84.3718512&zoom=13&size=300x300&sensor=false
-  const url = URLGenerator(googleStaticMapBaseURL, {
-    // center: '33.8186363,-84.3718512',
-    // zoom: '16',
-    size: '423x227',
-    markers: [
-      `size:tiny|color:red|${this.get('userLat')},${this.get('userLng')}`,
-      `color:red|${this.get('lat')},${this.get('lng')}`,
-    ]
+staticmapFullImg: computed('distanceAwayFromUser', staticmap('640x640')),
 
-  });
-  // const blob = await fetchBlob(url);
-  // const imgUrl = window.URL.createObjectURL(blob);
-  return url;
-}),
+staticMapImg: computed('distanceAwayFromUser', staticmap('423x227')),
 
 
 
