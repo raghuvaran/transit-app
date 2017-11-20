@@ -1,4 +1,4 @@
-{{#paper-card as |card|}}
+{{#paper-card class="border-radius-15" as |card|}}
   {{#card.header as |header|}}
     {{#header.avatar}}
       {{paper-icon bus.directionIcon}}
@@ -9,11 +9,13 @@
     {{/header.text}}
   {{/card.header}}
 
+  {{card.image src=bus.staticMapImg}}
+
   {{#card.title as |title|}}
-        {{#title.text as |text|}}
-          {{#text.headline}}{{bus.distanceFromUser}} miles away{{/text.headline}}
-        {{/title.text}}
-      {{/card.title}}
+    {{#title.text as |text|}}
+      {{#text.headline}}{{bus.distanceText}}{{/text.headline}}
+    {{/title.text}}
+  {{/card.title}}
       
   {{#card.content}}
     <p>{{bus.timePoint}}</p>
