@@ -26,7 +26,7 @@ export default EmberObject.extend({
   vechicle: null,
 
   
-  notifyAtLeastDistance: 10, // in miles
+  notifyAtLeastDistance: 1, // in miles
   precision: 2, 
 
   /* Computed properties */

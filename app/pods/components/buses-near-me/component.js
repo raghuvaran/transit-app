@@ -28,7 +28,7 @@ export default Component.extend({
   ].reduce((a,c) => {a[c[0]]=[c[1]]; return a},{}),
   activeBuses: initialArray(),
   // routes: EmberObject.computed.mapBy('buses', 'route'),
-  currentLocation: {latitude: '33.766856', longitude: '-84.367541'},//alias('globals.currentLocation'),
+  currentLocation: /* {latitude: '33.766856', longitude: '-84.367541'}, */alias('globals.currentLocation'),
   isGeoLocValid: bool('geoWatchId'),
   refreshInterval: null,
 
