@@ -1,16 +1,1 @@
-{{#paper-content padding=true}}
-<div class="layout-row">
-  {{#unless trackBusesTask.isRunning}}
-    {{#paper-button raised=true fab=true onClick=(perform trackBusesTask)}}{{paper-icon 'play arrow'}}{{/paper-button}}
-  {{else}}
-    {{#paper-button raised=true fab=true onClick=(action (invoke 'cancelAll' trackBusesTask))}}{{paper-icon 'stop'}}{{/paper-button}}
-  {{/unless}}
-  <span class="flex"></span>
-  {{#paper-subheader}}Last updated at: {{globals.lastPolledAt}}{{/paper-subheader}}
-</div>
-
-  {{#each activeBuses as |bus|}}
-    {{bus-card bus=bus}}
-  {{/each}}
-  
-{{/paper-content}}
+{{buses-near-me}}
