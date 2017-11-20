@@ -22,6 +22,13 @@ module.exports = function(deployTarget) {
     // configure other plugins for production deploy target here
   }
 
+  ENV.git = {
+    repo: 'git@github.com:raghuvaran/transit-app.git',
+    branch: 'gh-pages',
+    worktreePath: '/master',
+    commitMessage: 'Deployed %@'
+  };
+
   // Note: if you need to build some configuration asynchronously, you can return
   // a promise that resolves with the ENV object instead of returning the
   // ENV object synchronously.
