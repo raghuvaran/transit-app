@@ -7,7 +7,7 @@ import { alias, bool } from '@ember/object/computed';
 import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
 
-const padding = 'http://cors-proxy.htmldriven.com/?url=';
+const padding = 'https://crossorigin.me/';
 
 const initialArray = () => emberArray();
 
@@ -21,12 +21,11 @@ export default Component.extend({
   tagName: 'buses-near-me',
   busURL: `${padding}http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus`,
   requestedBuses: [
-    ["16", "southbound"],
-    ["16", "northbound"],
-    ["99", "northbound"],
-    ["109", "northbound"],
+    ["16", ["southbound"]],
+    ["99", ["northbound"]],
+    ["109", ["northbound"]],
     
-  ].reduce((a,c) => {a[c[0]]=[c[1]]; return a},{}),
+  ].reduce((a,c) => {a[c[0]]=c[1]; return a},{}),
   activeBuses: initialArray(),
   // routes: EmberObject.computed.mapBy('buses', 'route'),
   currentLocation: /* {latitude: '33.766856', longitude: '-84.367541'}, */alias('globals.currentLocation'),
@@ -47,16 +46,16 @@ export default Component.extend({
   async _getAllBusResponse() {
     const response = await fetchJson(this.get('busURL'));
     this.set('globals.lastPolledAt', moment().toDate());
-    return JSON.parse(response.body);
+    return response;
   },
 
   _processResponse(response) {
     let {latitude: userLat, longitude: userLng} = this.get('currentLocation');
-
+    const requestedBuses = this.get('requestedBuses');
     response.forEach(b => {
-      const allowedBus = this.get('requestedBuses')[b.ROUTE];
+      const allowedBus = requestedBuses[b.ROUTE];
       // skip if bus doesn't match the criterion
-      if(!allowedBus || allowedBus[0] !== String(b.DIRECTION).toLowerCase()) return;
+      if(!allowedBus || allowedBus.indexOf( String(b.DIRECTION).toLowerCase()) === -1) {/* console.log('returning', b, this.get('requestedBuses'), allowedBus); */ return};
 
       const bus = this.get('activeBuses').findBy('blockAbbr', b.BLOCK_ABBR);
       const attrs = {
