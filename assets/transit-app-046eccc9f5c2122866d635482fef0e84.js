@@ -33,18 +33,18 @@ e.default=t.extend({tagName:"bus-card",actions:{onClck:function(){window.locatio
 return new Promise(function(e,n){function r(o,a){try{var p=t[o](a),i=p.value}catch(e){return void n(e)}if(!p.done)return Promise.resolve(i).then(function(e){r("next",e)},function(e){r("throw",e)})
 e(i)}return r("next")})}}Object.defineProperty(e,"__esModule",{value:!0})
 var a=Ember.Component,p=Ember.inject.service,i=Ember.A,u=Ember.isPresent,s=Ember.computed.alias,l=Ember.computed.bool,c=function(){return i()},f=function(e){return e&&e.latitude&&e.latitude>=-90&&e.latitude<=90&&e.longitude&&e.longitude>=-180&&e.longitude<=180}
-e.default=a.extend({globals:p("globals"),geoloc:p("geoloc"),tagName:"buses-near-me",busURL:"http://cors-proxy.htmldriven.com/?url=http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus",requestedBuses:[["16","southbound"],["16","northbound"],["99","northbound"],["109","northbound"]].reduce(function(e,t){return e[t[0]]=[t[1]],e},{}),activeBuses:c(),currentLocation:s("globals.currentLocation"),isGeoLocValid:l("geoWatchId"),refreshInterval:null,init:function(){this._super.apply(this,arguments)
+e.default=a.extend({globals:p("globals"),geoloc:p("geoloc"),tagName:"buses-near-me",busURL:"https://crossorigin.me/http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus",requestedBuses:[["16",["southbound"]],["99",["northbound"]],["109",["northbound"]]].reduce(function(e,t){return e[t[0]]=t[1],e},{}),activeBuses:c(),currentLocation:s("globals.currentLocation"),isGeoLocValid:l("geoWatchId"),refreshInterval:null,init:function(){this._super.apply(this,arguments)
 var e=this.get("geoloc").subscribe()
 this.set("geoWatchId",e)},willDestroy:function(){this.get("geoloc").unSubscribe(this.get("geoWatchId")),this._super.apply(this,arguments)},_getAllBusResponse:function(){var e=o(regeneratorRuntime.mark(function e(){var t
 return regeneratorRuntime.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:return e.next=2,(0,r.fetchJson)(this.get("busURL"))
-case 2:return t=e.sent,this.set("globals.lastPolledAt",moment().toDate()),e.abrupt("return",JSON.parse(t.body))
+case 2:return t=e.sent,this.set("globals.lastPolledAt",moment().toDate()),e.abrupt("return",t)
 case 5:case"end":return e.stop()}},e,this)}))
-return function(){return e.apply(this,arguments)}}(),_processResponse:function(e){var n=this,r=this.get("currentLocation"),o=r.latitude,a=r.longitude
-e.forEach(function(e){var r=n.get("requestedBuses")[e.ROUTE]
-if(r&&r[0]===String(e.DIRECTION).toLowerCase()){var p=n.get("activeBuses").findBy("blockAbbr",e.BLOCK_ABBR),i={userLat:o,userLng:a,route:e.ROUTE,direction:String(e.DIRECTION).toLowerCase(),blockAbbr:e.BLOCK_ABBR,lat:e.LATITUDE,lng:e.LONGITUDE,adherence:e.ADHERENCE,msgTime:e.MSGTIME,timePoint:e.TIMEPOINT,stopId:e.STOPID,blockId:e.BLOCKID,tripId:e.TRIPID,vechicle:e.VEHICLE}
-if(u(p))p.setProperties(i)
-else{var s=t.default.create(i)
-n.get("activeBuses").pushObject(s)}}})},trackBusesTask:(0,n.task)(regeneratorRuntime.mark(function e(){var t,r,o
+return function(){return e.apply(this,arguments)}}(),_processResponse:function(e){var n=this,r=this.get("currentLocation"),o=r.latitude,a=r.longitude,p=this.get("requestedBuses")
+e.forEach(function(e){var r=p[e.ROUTE]
+if(r&&-1!==r.indexOf(String(e.DIRECTION).toLowerCase())){var i=n.get("activeBuses").findBy("blockAbbr",e.BLOCK_ABBR),s={userLat:o,userLng:a,route:e.ROUTE,direction:String(e.DIRECTION).toLowerCase(),blockAbbr:e.BLOCK_ABBR,lat:e.LATITUDE,lng:e.LONGITUDE,adherence:e.ADHERENCE,msgTime:e.MSGTIME,timePoint:e.TIMEPOINT,stopId:e.STOPID,blockId:e.BLOCKID,tripId:e.TRIPID,vechicle:e.VEHICLE}
+if(u(i))i.setProperties(s)
+else{var l=t.default.create(s)
+n.get("activeBuses").pushObject(l)}}})},trackBusesTask:(0,n.task)(regeneratorRuntime.mark(function e(){var t,r,o
 return regeneratorRuntime.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:if(t=this.get("refreshInterval")||2e3,r=this.get("currentLocation"),!f(r)){e.next=8
 break}return e.next=6,this._getAllBusResponse()
 case 6:o=e.sent,this._processResponse(o)
@@ -98,4 +98,4 @@ r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Obj
 return(this.hasAccess()||this.requestPermission(function(){return new(Function.prototype.bind.apply(window.Notification,[null].concat(Array.prototype.slice.call(e))))}))&&new(Function.prototype.bind.apply(window.Notification,[null].concat(Array.prototype.slice.call(arguments))))}},{key:"hasAccess",value:function(){return"granted"===window.Notification.permission||"denied"!==window.Notification.permission&&null}},{key:"requestPermission",value:function(e){var t=this
 return window.Notification.requestPermission().then(function(n){return t.hasAccess()&&"function"==typeof e&&e()}),this.hasAccess()}}]),e}()
 e.default=r}),define("transit-app/config/environment",[],function(){try{var e="transit-app/config/environment",t=document.querySelector('meta[name="'+e+'"]').getAttribute("content"),n={default:JSON.parse(unescape(t))}
-return Object.defineProperty(n,"__esModule",{value:!0}),n}catch(t){throw new Error('Could not read config from meta tag with name "'+e+'".')}}),runningTests||require("transit-app/app").default.create({name:"transit-app",version:"0.0.0+5f548c20"})
+return Object.defineProperty(n,"__esModule",{value:!0}),n}catch(t){throw new Error('Could not read config from meta tag with name "'+e+'".')}}),runningTests||require("transit-app/app").default.create({name:"transit-app",version:"0.0.0+dcb23cbe"})
