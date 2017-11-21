@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+      "experimentalDecorators": true
+  },
+  "exclude": [
+      "dist",
+      "bower_components",
+      "node_modules",
+      "tmp"
+  ]
+}
