@@ -1,4 +1,4 @@
-{{#paper-card click=(action 'onClck') class="border-radius-15" as |card|}}
+{{#paper-card click=(action 'openFullMap') class="border-radius-15" as |card|}}
   {{#card.header as |header|}}
     {{#header.avatar}}
       {{paper-icon bus.directionIcon}}
@@ -9,7 +9,7 @@
     {{/header.text}}
   {{/card.header}}
 
-  {{card.image src=bus.staticMapImg}}
+  {{card.image class='card-image' src=bus.staticMapImg}}
 
   {{#card.title as |title|}}
     {{#title.text as |text|}}
@@ -22,3 +22,18 @@
     <sub>updated at: {{bus.msgTime}}</sub>
   {{/card.content}}
 {{/paper-card}}
+{{#if showDialog}}
+  {{#paper-dialog class="flex" fullscreen=true origin=dialogOrigin clickOutsideToClose=true}}
+      {{#paper-toolbar}}
+        {{#paper-toolbar-tools}}
+          <h2>Route# {{bus.route}}</h2>
+          <span class="flex"></span>
+          {{#paper-button iconButton=true onClick=(action (mut showDialog) false)}}{{paper-icon icon="close"}}{{/paper-button}}
+        {{/paper-toolbar-tools}}
+      {{/paper-toolbar}}
+
+      {{#paper-dialog-content}}
+          <img src="{{bus.staticmapFullImg}}" alt="" >
+      {{/paper-dialog-content}}
+  {{/paper-dialog}}
+{{/if}}

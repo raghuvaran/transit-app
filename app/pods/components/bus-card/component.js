@@ -6,9 +6,10 @@ export default Component.extend({
   // style: htmlSafe('border-radius:15px;')
 
   actions:{
-    onClck() {
-      
-      window.location.href = this.get('bus.staticmapFullImg');
-    }
+    openFullMap() {
+      this.set('dialogOrigin', $(event.currentTarget));
+      this.set('showDialog', true);
+    },
+    
   }
 });
