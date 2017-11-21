@@ -10,6 +10,10 @@ const watchPosition = function(){
   return watchId;
 };
 
+const getCurrentPosition = function() {
+  navigator.geolocation.getCurrentPosition(...arguments);
+}
+
 /**
  * @module Services
  */
@@ -47,8 +51,21 @@ export default Service.extend({
     function onError(error) {
       clearWatch(watchId);
     }
+    //initial request
+    getCurrentPosition(onSuccess, onError);
 
     watchId = watchPosition(onSuccess, onError);
     return watchId;
   },
+
+  forceGetCurrentPosition() {
+    var that = this;
+
+    function onSuccess(position) {
+      that.set("globals.currentLocation", { latitude: position.coords.latitude, longitude: position.coords.longitude });
+    }
+
+    getCurrentPosition(onSuccess);
+    
+  }
 });

@@ -3,7 +3,7 @@ import BusObject from 'transit-app/models/bus';
 import {inject} from '@ember/service';
 import { A as emberArray } from '@ember/array';
 import { isPresent } from '@ember/utils';
-import { alias, bool } from '@ember/object/computed';
+import { alias, bool, sort } from '@ember/object/computed';
 import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
 
@@ -27,6 +27,8 @@ export default Component.extend({
     
   ].reduce((a,c) => {a[c[0]]=c[1]; return a},{}),
   activeBuses: initialArray(),
+  activeBusSorting: ['distanceAwayFromUser:asc'],
+  sortedActiveBuses: sort('activeBuses', 'activeBusSorting'),
   // routes: EmberObject.computed.mapBy('buses', 'route'),
   currentLocation: /* {latitude: '33.766856', longitude: '-84.367541'}, */alias('globals.currentLocation'),
   isGeoLocValid: bool('geoWatchId'),
@@ -96,10 +98,13 @@ export default Component.extend({
         // make sure user location is present
         const currentLocation = this.get('currentLocation');
         if(isGeoLocValid(currentLocation)) {
+          this.set('locationInvalid', false);
 
           const response = yield this._getAllBusResponse();
           this._processResponse(response);
 
+        }else {
+          this.set('locationInvalid', true);
         }
         
         yield timeout(timeoutDuration);
@@ -113,6 +118,10 @@ export default Component.extend({
       this.get('trackBusesTask').cancelAll();
       this.set('activeBuses', initialArray());
     },
+
+    forceGetCurrentPosition() {
+      this.get('geoloc').forceGetCurrentPosition();
+    }
     
   },
   
