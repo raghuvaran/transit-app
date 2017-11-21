@@ -6,7 +6,7 @@
     {{#paper-button class="flex-none" raised=true fab=true onClick=(action 'canceltrackBusesTask')}}{{paper-icon 'stop'}}{{/paper-button}}
   {{/unless}}
   <span class="flex"></span>
-  {{#paper-subheader}}Last updated at: {{moment-format globals.lastPolledAt 'LTS'}}{{/paper-subheader}}
+  {{#paper-subheader}}Last updated at: {{if globals.lastPolledAt (moment-format globals.lastPolledAt 'LTS') 'Never'}}{{/paper-subheader}}
 </div>
 <div class="layout-row">
   {{#if locationInvalid}}
