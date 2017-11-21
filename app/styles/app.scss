@@ -3,3 +3,24 @@
 .border-radius-15 {
   border-radius: 15px;
 }
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.max-height-100 {
+  max-height: 100%;
+}
+
+.overflow-y-auto {
+  overflow-y: auto;
+}
+
+body > div.ember-view {
+  display: flex;
+  max-height: 100%;
+}
+
+.break-word {
+  word-break: break-all;
+}

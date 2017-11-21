@@ -3,7 +3,7 @@ import BusObject from 'transit-app/models/bus';
 import {inject} from '@ember/service';
 import { A as emberArray } from '@ember/array';
 import { isPresent } from '@ember/utils';
-import { alias, bool, sort } from '@ember/object/computed';
+import { alias, bool, reads, sort } from '@ember/object/computed';
 import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
 
@@ -18,7 +18,9 @@ const isGeoLocValid = (location) => location &&
 export default Component.extend({
   globals: inject('globals'),
   geoloc: inject('geoloc'),
+  debug: inject('debugger-log'),
   tagName: 'buses-near-me',
+  classNames: ['layout-column'],
   busURL: `${padding}http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus`,
   requestedBuses: [
     ["16", ["southbound"]],
@@ -33,6 +35,9 @@ export default Component.extend({
   currentLocation: /* {latitude: '33.766856', longitude: '-84.367541'}, */alias('globals.currentLocation'),
   isGeoLocValid: bool('geoWatchId'),
   refreshInterval: null,
+  debugTapCount: 5,
+  debugMode: reads('debug.isActive'),  
+  debugLog: emberArray(),
 
   init(){
     this._super(...arguments);
@@ -91,24 +96,42 @@ export default Component.extend({
 
   trackBusesTask: task(
     function*() {
-      while(true) {
+      try{
 
-        let timeoutDuration = this.get('refreshInterval') || 2000;
+        while(true) {
 
-        // make sure user location is present
-        const currentLocation = this.get('currentLocation');
-        if(isGeoLocValid(currentLocation)) {
-          this.set('locationInvalid', false);
+          let timeoutDuration = this.get('refreshInterval') || 2000;
 
-          const response = yield this._getAllBusResponse();
-          this._processResponse(response);
+          // make sure user location is present
+          const currentLocation = this.get('currentLocation');
+          // const debugMode = this.get('debugMode');
 
-        }else {
-          this.set('locationInvalid', true);
+          this.get('debug').logger(`Validating current location ${JSON.stringify(currentLocation)}`);
+
+          if(isGeoLocValid(currentLocation)) {
+            this.get('debug').logger(`Current location is valid`);
+            this.set('locationInvalid', false);
+            
+            let start_time = moment();
+            const response = yield this._getAllBusResponse();
+            this.get('debug').logger(`Fetch completed in ${moment().diff(start_time, 'seconds')} seconds`);
+            this._processResponse(response);
+            start_time = moment();
+            this.get('debug').logger(`Processed response in ${moment().diff(start_time, 'seconds')} seconds`);
+            
+          }else {
+            this.get('debug').logger(`Current location is NOT valid`);
+            
+            this.set('locationInvalid', true);
+          }
+          
+          this.get('debug').logger(`sleeping for ${timeoutDuration} ms`);
+          yield timeout(timeoutDuration);
+          this.get('debug').logger(`woke up; ready to hit endpoint`);
+          
         }
-        
-        yield timeout(timeoutDuration);
-        
+      } catch(e) {
+        this.get('debug').logger(`API fetch errored ${e.message}`);
       }
     }
   ),
@@ -121,6 +144,25 @@ export default Component.extend({
 
     forceGetCurrentPosition() {
       this.get('geoloc').forceGetCurrentPosition();
+    },
+    
+    activateDebugMode() {
+      if(this.get('debug.isActive')) return;
+
+      this.decrementProperty('debugTapCount');
+      if(this.get('debugTapCount') < 1) this.set('debug.isActive', true);
+    },
+
+    deactivateDebugMode() {
+      this.set('debug.isActive', false);
+    },
+
+    clearDebugLog() {
+      this.get('debug').clearDebugLog();
+    },
+
+    popDebugLog(dl) {
+      this.get('debug').popDebugLog(dl);      
     }
     
   },

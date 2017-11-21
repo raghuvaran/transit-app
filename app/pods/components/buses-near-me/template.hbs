@@ -1,22 +1,46 @@
-{{#paper-content padding=true}}
-<div class="layout-row">
+{{#paper-content class="layout-column" padding=true}}
+{{#if debug.isActive}}
+<div class="layout-row flex-5">
+  <div class="layout-column flex-grow">
+    <div class="layout-row layout-align-start-center">
+    {{#paper-subheader}}Debugger log{{/paper-subheader}}
+    {{#paper-button iconButton=true onClick=(action 'clearDebugLog')}}{{paper-icon "clear all"}}{{/paper-button}}
+    <span class="flex"></span>
+    {{#paper-button iconButton=true onClick=(action 'deactivateDebugMode')}}{{paper-icon "close"}}{{/paper-button}}
+    </div>
+    <ul class="break-word overflow-y-auto">
+      {{#each debug.log as |dl|}}
+          <li {{action 'popDebugLog' dl}}>{{dl}}</li>
+      {{/each}}
+    </ul>
+  </div>
+</div>
+{{/if}}
+<div class="layout-row flex-none">
   {{#unless trackBusesTask.isRunning}}
     {{#paper-button class="flex-none" raised=true fab=true onClick=(perform trackBusesTask)}}{{paper-icon 'play arrow'}}{{/paper-button}}
+    {{if debug.isActive 'TrackBusesTask is stopped'}}
   {{else}}
     {{#paper-button class="flex-none" raised=true fab=true onClick=(action 'canceltrackBusesTask')}}{{paper-icon 'stop'}}{{/paper-button}}
+    {{if debug.isActive 'TrackBusesTask is running'}}
   {{/unless}}
   <span class="flex"></span>
-  {{#paper-subheader}}Last updated at: {{if globals.lastPolledAt (moment-format globals.lastPolledAt 'LTS') 'Never'}}{{/paper-subheader}}
+  {{#paper-subheader onClick=(action 'activateDebugMode')}}Last updated at: {{if globals.lastPolledAt (moment-format globals.lastPolledAt 'LTS') 'Never'}}{{/paper-subheader}}
 </div>
-<div class="layout-row">
-  {{#if locationInvalid}}
-    {{#paper-subheader}}Couldn't get your location{{/paper-subheader}} 
+  {{#if (or debug.isActive locationInvalid)}}
+  <div class="layout-row flex-none">
+    {{#if locationInvalid}}
+      {{#paper-subheader}}Couldn't get your location{{/paper-subheader}} 
+    {{else}}
+      {{#paper-subheader}}Current location: {{globals.currentLocation.latitude}}, {{globals.currentLocation.longitude}}{{/paper-subheader}} 
+    {{/if}}
     {{paper-button onClick=(action 'forceGetCurrentPosition') label="Retry"}}
+  </div>
   {{/if}}
-</div>
-
-  {{#each sortedActiveBuses as |bus|}}
-    {{bus-card bus=bus}}
+  <div class="layout-row flex-wrap overflow-y-auto flex-grow">
+  {{#each sortedActiveBuses as |bus index|}}
+    {{bus-card class="" bus=bus index=index}}
   {{/each}}
+  </div>
   
 {{/paper-content}}
