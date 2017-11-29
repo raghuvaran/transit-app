@@ -24,3 +24,16 @@ body > div.ember-view {
 .break-word {
   word-break: break-all;
 }
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9e9e9e;
+}
+
+::-webkit-scrollbar-track {
+  background: 0 0;
+}
