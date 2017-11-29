@@ -20,7 +20,7 @@ export default Component.extend({
   geoloc: inject('geoloc'),
   debug: inject('debugger-log'),
   tagName: 'buses-near-me',
-  classNames: ['layout-column'],
+  classNames: ['layout-column', 'flex-grow'],
   busURL: `${padding}http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus`,
   requestedBuses: [
     ["16", ["southbound"]],
