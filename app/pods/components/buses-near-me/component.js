@@ -7,7 +7,7 @@ import { alias, bool, reads, sort } from '@ember/object/computed';
 import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
 
-const padding = 'https://crossorigin.me/';
+const padding = 'https://people.cs.clemson.edu/~rchowda/cors/?';
 
 const initialArray = () => emberArray();
 
