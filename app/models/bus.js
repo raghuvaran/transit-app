@@ -45,7 +45,8 @@ export default EmberObject.extend({
 
   
   notifyAtLeastDistance: 1, // in miles
-  precision: 2, 
+  precision: 2,
+  latLngUpdatedAt: null,
 
   /* Computed properties */
   distanceAwayFromUser: computed('userLat', 'userLng', 'lat', 'lng', {
@@ -83,7 +84,11 @@ notify: function() {
     const title = `Route ${this.get('route')} (${this.get('direction')})`;
     const body = `Bus is ${this.get('distanceText')} from you`;
     const image = this.get('staticMapImg');
-    return Notification.create(title,{body, image});
+    try {
+      return Notification.create(title,{body, image});
+    } catch(e) {
+      console.error('Failed to create notification', e);
+    }
   }
 }.observes('distanceAwayFromUser'),
 
@@ -92,5 +97,15 @@ staticmapFullImg: computed('distanceAwayFromUser', staticmap('640x640')),
 staticMapImg: computed('distanceAwayFromUser', staticmap('423x227')),
 
 
+setLatLng({lat, lng}) {
+  const oldLat = this.get('lat');
+  const oldLng = this.get('lng');
+  if(lat !=oldLat || lng != oldLng) {
+    this.set('lat', lat);
+    this.set('lng', lng);
+    this.set('latLngUpdatedAt', moment().toDate());
+  }
+
+},
 
 });

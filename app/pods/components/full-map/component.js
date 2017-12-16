@@ -20,7 +20,7 @@ export default Component.extend({
     try {
       const currentLocation = this.get('globals.currentLocation');
       const map = new google.maps.Map(document.getElementById(this.get('elementId')), {
-        center: { lat: currentLocation.latitude, lng: currentLocation.longitude },
+        center: { lat: currentLocation.lat, lng: currentLocation.lng },
         zoom: 16,
       });
       this.set('map', map);

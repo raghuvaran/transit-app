@@ -45,7 +45,7 @@ export default Service.extend({
     if(!navigator || !navigator.geolocation) return null; // if the device doesn't support geolocation api
 
     function onSuccess(position) {
-      that.set("globals.currentLocation", { latitude: position.coords.latitude, longitude: position.coords.longitude });
+      that.set("globals.currentLocation", { lat: position.coords.latitude, lng: position.coords.longitude });
     }
     
     function onError(error) {
@@ -58,11 +58,12 @@ export default Service.extend({
     return watchId;
   },
 
-  forceGetCurrentPosition() {
+  forceGetCurrentPosition(coord/* ={lat: null, lng: null} */) {
     var that = this;
+    if(coord) this.set("globals.currentLocation", coord);
 
     function onSuccess(position) {
-      that.set("globals.currentLocation", { latitude: position.coords.latitude, longitude: position.coords.longitude });
+      that.set("globals.currentLocation", { lat: position.coords.latitude, lng: position.coords.longitude });
     }
 
     getCurrentPosition(onSuccess);
