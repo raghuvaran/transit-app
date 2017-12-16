@@ -83,7 +83,11 @@ notify: function() {
     const title = `Route ${this.get('route')} (${this.get('direction')})`;
     const body = `Bus is ${this.get('distanceText')} from you`;
     const image = this.get('staticMapImg');
-    return Notification.create(title,{body, image});
+    try {
+      return Notification.create(title,{body, image});
+    } catch(e) {
+      console.error('Failed to create notification', e);
+    }
   }
 }.observes('distanceAwayFromUser'),
 
