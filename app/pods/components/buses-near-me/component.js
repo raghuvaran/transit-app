@@ -1,19 +1,16 @@
 import Component from '@ember/component';
-import BusObject from 'transit-app/models/bus';
+import BusObject from '../../../models/bus';
 import {inject} from '@ember/service';
 import { A as emberArray } from '@ember/array';
 import { isPresent } from '@ember/utils';
 import { alias, bool, reads, sort } from '@ember/object/computed';
 import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
+import { isGeoLocValid } from '../../../utils/gps-helper';
 
 const padding = 'https://people.cs.clemson.edu/~rchowda/cors/?';
 
 const initialArray = () => emberArray();
-
-const isGeoLocValid = (location) => location &&
- location.latitude && location.latitude >= -90 && location.latitude <= 90 &&
- location.longitude && location.longitude >= -180 && location.longitude <= 180 ;
 
 export default Component.extend({
   globals: inject('globals'),
@@ -32,7 +29,7 @@ export default Component.extend({
   activeBusSorting: ['distanceAwayFromUser:asc'],
   sortedActiveBuses: sort('activeBuses', 'activeBusSorting'),
   // routes: EmberObject.computed.mapBy('buses', 'route'),
-  currentLocation: /* {latitude: '33.766856', longitude: '-84.367541'}, */alias('globals.currentLocation'),
+  currentLocation: /* {lat: '33.766856', lng: '-84.367541'}, */alias('globals.currentLocation'),
   isGeoLocValid: bool('geoWatchId'),
   refreshInterval: null,
   debugTapCount: 5,
@@ -57,7 +54,7 @@ export default Component.extend({
   },
 
   _processResponse(response) {
-    let {latitude: userLat, longitude: userLng} = this.get('currentLocation');
+    let {lat: userLat, lng: userLng} = this.get('currentLocation');
     const requestedBuses = this.get('requestedBuses');
     response.forEach(b => {
       const allowedBus = requestedBuses[b.ROUTE];
@@ -71,8 +68,8 @@ export default Component.extend({
         route: b.ROUTE,
         direction: String(b.DIRECTION).toLowerCase(),
         blockAbbr: b.BLOCK_ABBR,
-        lat: b.LATITUDE,
-        lng: b.LONGITUDE,
+        // lat: b.LATITUDE,
+        // lng: b.LONGITUDE,
         adherence: b.ADHERENCE,
         msgTime: b.MSGTIME,
         timePoint: b.TIMEPOINT,
@@ -84,6 +81,10 @@ export default Component.extend({
 
       // if there is an existing bus, update it or else create and push it to the array
       if(isPresent(bus)) {
+        bus.setLatLng({
+          lat: b.LATITUDE,
+          lng: b.LONGITUDE,
+        });
         bus.setProperties(attrs);
       }else {
         const newBusObj = BusObject.create(attrs);
