@@ -6,7 +6,7 @@ export function initialize(appInstance) {
   const geoloc = appInstance.lookup('service:geoloc');
   
   // application.inject('route', 'foo', 'service:foo');
-  geoloc.forceGetCurrentPosition({lat: '33.766856', lng: '-84.367541'});
+  geoloc.forceGetCurrentPosition({lat: '33.766856', lng: '-84.367541'}); 
   window.initMap = function() { return $.getScript(`https://maps.googleapis.com/maps/api/js?key=${key}`) };
 }
 

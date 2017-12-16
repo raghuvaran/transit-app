@@ -1,25 +1,25 @@
 import Application from '@ember/application';
 import { run } from '@ember/runloop';
-
-import { initialize } from 'transit-app/initializers/google-map';
+import { initialize } from 'transit-app/instance-initializers/google-maps';
 import { module, test } from 'qunit';
 import destroyApp from '../../helpers/destroy-app';
 
-module('Unit | Initializer | google map', {
+module('Unit | Instance Initializer | google maps', {
   beforeEach() {
     run(() => {
       this.application = Application.create();
-      this.application.deferReadiness();
+      this.appInstance = this.application.buildInstance();
     });
   },
   afterEach() {
+    run(this.appInstance, 'destroy');
     destroyApp(this.application);
   }
 });
 
 // Replace this with your real tests.
 test('it works', function(assert) {
-  initialize(this.application);
+  initialize(this.appInstance);
 
   // you would normally confirm the results of the initializer here
   assert.ok(true);
