@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-const key = 'AIzaSyDxkP6K5lh2VBZUVLMZW4YqvwseeDIb-PI';
+const key = 'AIzaSyDUZ_JoVs7XrbCBNofu4QqfTO5HzefbUdk';
 export function initialize(appInstance) {
   // appInstance.inject('route', 'foo', 'service:foo');
   const geoloc = appInstance.lookup('service:geoloc');
