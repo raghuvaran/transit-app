@@ -8,7 +8,7 @@ import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
 import { isGeoLocValid } from '../../../utils/gps-helper';
 
-const padding = 'https://people.cs.clemson.edu/~rchowda/cors/?';
+const padding = 'https://people.cs.clemson.edu/~rchowda/cors_2/?';
 
 const initialArray = () => emberArray();
 
@@ -59,7 +59,10 @@ export default Component.extend({
     response.forEach(b => {
       const allowedBus = requestedBuses[b.ROUTE];
       // skip if bus doesn't match the criterion
-      if(!allowedBus || allowedBus.indexOf( String(b.DIRECTION).toLowerCase()) === -1) {/* console.log('returning', b, this.get('requestedBuses'), allowedBus); */ return};
+      if(!allowedBus || allowedBus.indexOf( String(b.DIRECTION).toLowerCase()) === -1) {
+        /* console.log('returning', b, this.get('requestedBuses'), allowedBus); */
+         return;
+        };
 
       const bus = this.get('activeBuses').findBy('blockAbbr', b.BLOCK_ABBR);
       const attrs = {
@@ -107,32 +110,32 @@ export default Component.extend({
           const currentLocation = this.get('currentLocation');
           // const debugMode = this.get('debugMode');
 
-          this.get('debug').logger(`Validating current location ${JSON.stringify(currentLocation)}`);
+          /*debug************************************************/ this.get('debug').logger(`Validating current location ${JSON.stringify(currentLocation)}`);
 
           if(isGeoLocValid(currentLocation)) {
-            this.get('debug').logger(`Current location is valid`);
+            /*debug************************************************/ this.get('debug').logger(`Current location is valid`);
             this.set('locationInvalid', false);
             
             let start_time = moment();
             const response = yield this._getAllBusResponse();
-            this.get('debug').logger(`Fetch completed in ${moment().diff(start_time, 'seconds')} seconds`);
+            /*debug************************************************/ this.get('debug').logger(`Fetch completed in ${moment().diff(start_time, 'seconds')} seconds`);
             this._processResponse(response);
             start_time = moment();
-            this.get('debug').logger(`Processed response in ${moment().diff(start_time, 'seconds')} seconds`);
+            /*debug************************************************/ this.get('debug').logger(`Processed response in ${moment().diff(start_time, 'seconds')} seconds`);
             
           }else {
-            this.get('debug').logger(`Current location is NOT valid`);
+            /*debug************************************************/ this.get('debug').logger(`Current location is NOT valid`);
             
             this.set('locationInvalid', true);
           }
           
-          this.get('debug').logger(`sleeping for ${timeoutDuration} ms`);
+          /*debug************************************************/ this.get('debug').logger(`sleeping for ${timeoutDuration} ms`);
           yield timeout(timeoutDuration);
-          this.get('debug').logger(`woke up; ready to hit endpoint`);
+          /*debug************************************************/ this.get('debug').logger(`woke up; ready to hit endpoint`);
           
         }
       } catch(e) {
-        this.get('debug').logger(`API fetch errored ${e.message}`);
+        /*debug************************************************/ this.get('debug').logger(`API fetch errored ${e.message}`);
       }
     }
   ),
@@ -140,6 +143,7 @@ export default Component.extend({
   actions:{
     canceltrackBusesTask() {
       this.get('trackBusesTask').cancelAll();
+      this.get('activeBuses').forEach(b => b.destroy());
       this.set('activeBuses', initialArray());
     },
 
@@ -159,11 +163,11 @@ export default Component.extend({
     },
 
     clearDebugLog() {
-      this.get('debug').clearDebugLog();
+      /*debug************************************************/ this.get('debug').clearDebugLog();
     },
 
     popDebugLog(dl) {
-      this.get('debug').popDebugLog(dl);      
+      /*debug************************************************/ this.get('debug').popDebugLog(dl);      
     }
     
   },
