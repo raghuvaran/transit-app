@@ -2,7 +2,7 @@
   <div class="layout-row flex-grow">
   {{#full-map class="flex-grow" buses=sortedActiveBuses viewName="myabc" as |map ignore|}}
     {{#if map}}
-    {{#each activeBuses as |bus|}}
+    {{#each sortedActiveBuses as |bus|}}
       {{info-window bus=bus map=map}}
     {{/each}}
     {{/if}}
