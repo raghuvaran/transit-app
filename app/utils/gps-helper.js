@@ -17,4 +17,8 @@ function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
 
-export { getDistanceFromLatLonInMiles };
+const isGeoLocValid = (location) => location &&
+location.lat && location.lat >= -90 && location.lat <= 90 &&
+location.lng && location.lng >= -180 && location.lng <= 180 ;
+
+export { getDistanceFromLatLonInMiles, isGeoLocValid };

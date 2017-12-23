@@ -43,11 +43,17 @@ export default EmberObject.extend({
   tripId: null,
   vechicle: null,
 
-  
   notifyAtLeastDistance: 1, // in miles
-  precision: 2, 
+  precision: 2,
+  latLngUpdatedAt: null,
 
   /* Computed properties */
+  latLng: computed('lat', 'lng', {
+    get() {
+      const lat = parseFloat(this.get('lat')), lng = parseFloat(this.get('lng'));
+      return {lat, lng};
+    }
+  }),
   distanceAwayFromUser: computed('userLat', 'userLng', 'lat', 'lng', {
   get() {
     const { userLat, userLng, lat, lng } = this.getProperties('userLat', 'userLng', 'lat', 'lng');
@@ -57,7 +63,7 @@ export default EmberObject.extend({
 
   shouldNotify: computed('distanceAwayFromUser', 'notifyAtLeastDistance', {
     get() {
-      return this.get('distanceAwayFromUser') <= this.get('notifyAtLeastDistance');
+      return parseFloat(this.get('distanceAwayFromUser')) <= this.get('notifyAtLeastDistance');
     }
   }),
 
@@ -91,10 +97,79 @@ notify: function() {
   }
 }.observes('distanceAwayFromUser'),
 
+// _marker: computed('isMapThere', {
+//   get() {
+//     if(this.get('isMapThere')) {
+//       const latLng= this.get('latLng'), map = this.get('mapObj');
+//       const label = this.get('markerLabel');
+//       return new google.maps.Marker({
+//         position: latLng,
+//         map: map,
+//         label,
+//       });
+//     }
+//   }
+// }),
+
+markerLabel: computed('route', 'direction', {
+  get() {
+    return `${this.get('route')}`;
+  }
+}),
+
+// infoWindow: computed('_marker', {
+//   get() {
+//     const marker = this.get('_marker');
+//     const map = this.get('mapObj');
+//     if(this.get('isMapThere') && marker) {
+//       const content = this.get('infoWindowContent');
+//       const window = new google.maps.InfoWindow({
+//         content,
+//       });
+//       window.open(map, marker);
+//       return window;
+//     }
+//   }
+// }),
+
+
+// infoWindowContent: computed('distanceText', 'latLngUpdatedAt', {
+//   get() {
+//       const distanceText = this.get('distanceText');
+//       const latLngUpdatedAt = this.get('latLngUpdatedAt');
+//       return `
+//       <h3>${distanceText}</h3>
+//       <p>${moment(latLngUpdatedAt).format('LTS')}</p>
+//       `;
+//   } 
+// }),
+
+// markerFunc: function() {
+//   const marker = this.get('_marker');
+//   if(marker) {
+//     const latLng = this.get('latLng');
+//     const infoWindow = this.get('infoWindow');
+//     const infoWindowContent = this.get('infoWindowContent');
+//     marker.setPosition(latLng);
+//     infoWindow.setContent(infoWindowContent);
+//   }
+  
+// }.observes('latLngUpdatedAt'),
+
 staticmapFullImg: computed('distanceAwayFromUser', staticmap('640x640')),
 
 staticMapImg: computed('distanceAwayFromUser', staticmap('423x227')),
 
 
+setLatLng({lat, lng}) {
+  const oldLat = this.get('lat');
+  const oldLng = this.get('lng');
+  if(lat !=oldLat || lng != oldLng) {
+    this.set('lat', lat);
+    this.set('lng', lng);
+    this.set('latLngUpdatedAt', moment().toDate());
+  }
+
+},
 
 });

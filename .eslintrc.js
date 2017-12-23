@@ -18,5 +18,6 @@ module.exports = {
   globals: {
     moment: true,
     $: true,
+    google: true,
   }
 };

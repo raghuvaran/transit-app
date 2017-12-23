@@ -1,4 +1,4 @@
-{{#paper-content class="layout-column" padding=true}}
+{{#paper-content class="layout-column flex-grow" padding=true}}
 {{#if debug.isActive}}
 <div class="layout-row flex-5">
   <div class="layout-column flex-grow">
@@ -30,17 +30,14 @@
   {{#if (or debug.isActive locationInvalid)}}
   <div class="layout-row flex-none">
     {{#if locationInvalid}}
-      {{#paper-subheader}}Couldn't get your location{{/paper-subheader}} 
+      {{#paper-subheader}}Couldn't get your location{{/paper-subheader}}
     {{else}}
       {{#paper-subheader}}Current location: {{globals.currentLocation.latitude}}, {{globals.currentLocation.longitude}}{{/paper-subheader}} 
     {{/if}}
     {{paper-button onClick=(action 'forceGetCurrentPosition') label="Retry"}}
   </div>
   {{/if}}
-  <div class="layout-row flex-wrap overflow-y-auto flex-grow">
-  {{#each sortedActiveBuses as |bus index|}}
-    {{bus-card class="" bus=bus index=index}}
-  {{/each}}
-  </div>
+
+  {{yield sortedActiveBuses}}
   
 {{/paper-content}}

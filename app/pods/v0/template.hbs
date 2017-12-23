@@ -1,0 +1,7 @@
+{{#buses-near-me as |sortedActiveBuses|}}
+  <div class="layout-row flex-wrap overflow-y-auto flex-grow">
+  {{#each sortedActiveBuses as |bus index|}}
+    {{bus-card class="" bus=bus index=index}}
+  {{/each}}
+  </div>
+{{/buses-near-me}}

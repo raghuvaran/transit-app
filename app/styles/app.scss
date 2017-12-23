@@ -12,6 +12,10 @@
   max-height: 100%;
 }
 
+.height-100 {
+  height: 100%;
+}
+
 .overflow-y-auto {
   overflow-y: auto;
 }
@@ -19,6 +23,7 @@
 body > div.ember-view {
   display: flex;
   max-height: 100%;
+  height: 100%;
 }
 
 .break-word {
@@ -36,4 +41,9 @@ body > div.ember-view {
 
 ::-webkit-scrollbar-track {
   background: 0 0;
+}
+
+.zero-size {
+  height: 0px;
+  width: 0px;
 }
