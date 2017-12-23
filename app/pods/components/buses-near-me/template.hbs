@@ -37,14 +37,7 @@
     {{paper-button onClick=(action 'forceGetCurrentPosition') label="Retry"}}
   </div>
   {{/if}}
-  <div class="layout-row flex-grow">
-  {{#full-map class="flex-grow" buses=activeBuses viewName="myabc" as |map ignore|}}
-    {{#if map}}
-    {{#each activeBuses as |bus|}}
-      {{info-window bus=bus map=map}}
-    {{/each}}
-    {{/if}}
-  {{/full-map}}
-  </div>
+
+  {{yield sortedActiveBuses}}
   
 {{/paper-content}}

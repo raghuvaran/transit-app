@@ -1,1 +1,11 @@
-{{buses-near-me}}
+{{#buses-near-me as |sortedActiveBuses|}}
+  <div class="layout-row flex-grow">
+  {{#full-map class="flex-grow" buses=sortedActiveBuses viewName="myabc" as |map ignore|}}
+    {{#if map}}
+    {{#each activeBuses as |bus|}}
+      {{info-window bus=bus map=map}}
+    {{/each}}
+    {{/if}}
+  {{/full-map}}
+  </div>
+{{/buses-near-me}}
