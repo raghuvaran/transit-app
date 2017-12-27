@@ -16,6 +16,8 @@
   </div>
 </div>
 {{/if}}
+
+
 <div class="layout-row flex-none">
   {{#unless trackBusesTask.isRunning}}
     {{#paper-button class="flex-none" raised=true fab=true onClick=(perform trackBusesTask)}}{{paper-icon 'play arrow'}}{{/paper-button}}
@@ -24,9 +26,12 @@
     {{#paper-button class="flex-none" raised=true fab=true onClick=(action 'canceltrackBusesTask')}}{{paper-icon 'stop'}}{{/paper-button}}
     {{if debug.isActive 'TrackBusesTask is running'}}
   {{/unless}}
-  <span class="flex"></span>
+  {{!-- <span class="flex"></span> --}}
+  {{bus-picker class="flex" selectedBuses=(readonly _requestedBuses) addBus=(action 'addBus') removeBus=(action 'removeBus')}}
   {{#paper-subheader onClick=(action 'activateDebugMode')}}Last updated at: {{if globals.lastPolledAt (moment-format globals.lastPolledAt 'LTS') 'Never'}}{{/paper-subheader}}
 </div>
+
+
   {{#if (or debug.isActive locationInvalid)}}
   <div class="layout-row flex-none">
     {{#if locationInvalid}}

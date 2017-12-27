@@ -3,6 +3,7 @@ import BusObject from '../../../models/bus';
 import {inject} from '@ember/service';
 import { A as emberArray } from '@ember/array';
 import { isPresent } from '@ember/utils';
+import { computed } from '@ember/object';
 import { alias, bool, reads, sort } from '@ember/object/computed';
 import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
@@ -19,12 +20,31 @@ export default Component.extend({
   tagName: 'buses-near-me',
   classNames: ['layout-column', 'flex-grow'],
   busURL: `${padding}http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus`,
-  requestedBuses: [
-    ["16", ["southbound"]],
-    ["99", ["northbound"]],
-    ["109", ["northbound"]],
+  _requestedBuses: [
+    [16, ["southbound"]],
+    [99, ["northbound"]],
+    [109, ["northbound"]],
     
-  ].reduce((a,c) => {a[c[0]]=c[1]; return a},{}),
+  ].reduce((a,c) => 
+    a.concat({
+      route: c[0],
+      direction: c[1],
+    })
+  , emberArray()),
+  requestedBuses: computed('_requestedBuses.[]', {
+    get() {
+      const hash = {};
+      this.get('_requestedBuses').forEach(b => {
+        hash[b.route] = hash[b.route] || [];
+        const directions = hash[b.route];
+        const direction = String(b.direction).toLowerCase();
+        if(directions.indexOf(direction) === -1) {
+          hash[b.route].push(direction);
+        }
+      });
+      return hash;
+    }
+  }),
   activeBuses: initialArray(),
   activeBusSorting: ['distanceAwayFromUser:asc'],
   sortedActiveBuses: sort('activeBuses', 'activeBusSorting'),
@@ -149,6 +169,13 @@ export default Component.extend({
 
     forceGetCurrentPosition() {
       this.get('geoloc').forceGetCurrentPosition();
+    },
+
+    addBus(bus) {
+      this.get('_requestedBuses').pushObject(bus);
+    },
+    removeBus(bus) {
+      this.get('_requestedBuses').removeObject(bus);
     },
     
     activateDebugMode() {
