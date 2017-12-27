@@ -38,7 +38,7 @@ e(i)}return r("next")})}}Object.defineProperty(e,"__esModule",{value:!0})
 var r=Ember.Component,o=Ember.A,a=Ember.computed
 e.default=r.extend({init:function(){this._super.apply(this,arguments),this.getAllBuses()},allBuses:o(),selectedBuses:o(),remainingBuses:a("selectedBuses.[]","allBuses.[]",{get:function(){var e=this.get("allBuses"),t=this.get("selectedBuses")
 return e.filter(function(e){return!t.any(function(t){return t===e})})}}),getAllBuses:function(){var e=n(regeneratorRuntime.mark(function e(){var n,r
-return regeneratorRuntime.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:return n="/assets/all-buses.json",e.prev=1,e.next=4,(0,t.fetchJson)(n)
+return regeneratorRuntime.wrap(function(e){for(;;)switch(e.prev=e.next){case 0:return n="/transit-app/assets/all-buses.json",e.prev=1,e.next=4,(0,t.fetchJson)(n)
 case 4:r=e.sent,r=r.map(function(e){return{route:parseInt(e.route),direction:String(e.direction).toLowerCase()}}),this.set("allBuses",r),e.next=12
 break
 case 9:e.prev=9,e.t0=e.catch(1),console.error("Failed to fetch all-buses.json")
@@ -152,4 +152,4 @@ r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Obj
 return(this.hasAccess()||this.requestPermission(function(){return new(Function.prototype.bind.apply(window.Notification,[null].concat(Array.prototype.slice.call(e))))}))&&new(Function.prototype.bind.apply(window.Notification,[null].concat(Array.prototype.slice.call(arguments))))}},{key:"hasAccess",value:function(){return"granted"===window.Notification.permission||"denied"!==window.Notification.permission&&null}},{key:"requestPermission",value:function(e){var t=this
 return window.Notification.requestPermission().then(function(n){return t.hasAccess()&&"function"==typeof e&&e()}),this.hasAccess()}}]),e}()
 e.default=r}),define("transit-app/config/environment",[],function(){try{var e="transit-app/config/environment",t=document.querySelector('meta[name="'+e+'"]').getAttribute("content"),n={default:JSON.parse(unescape(t))}
-return Object.defineProperty(n,"__esModule",{value:!0}),n}catch(t){throw new Error('Could not read config from meta tag with name "'+e+'".')}}),runningTests||require("transit-app/app").default.create({name:"transit-app",version:"0.0.0+21657e22"})
+return Object.defineProperty(n,"__esModule",{value:!0}),n}catch(t){throw new Error('Could not read config from meta tag with name "'+e+'".')}}),runningTests||require("transit-app/app").default.create({name:"transit-app",version:"0.0.0+640a7dd2"})
