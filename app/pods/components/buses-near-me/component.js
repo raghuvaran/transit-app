@@ -9,7 +9,7 @@ import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
 import { isGeoLocValid } from '../../../utils/gps-helper';
 
-const padding = 'https://people.cs.clemson.edu/~rchowda/cors_2/?';
+const padding = 'https://people.cs.clemson.edu/~rchowda/cors/?';
 
 const initialArray = () => emberArray();
 
