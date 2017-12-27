@@ -27,7 +27,7 @@ export default Component.extend({
   }),
 
   async getAllBuses() {
-    const url = `/assets/all-buses.json`;
+    const url = `/transit-app/assets/all-buses.json`;
     try {
       let buses = await fetchJson(url);
       buses = buses.map(b =>({
