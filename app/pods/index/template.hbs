@@ -1,9 +1,9 @@
 {{#buses-near-me as |sortedActiveBuses|}}
   <div class="layout-row flex-grow">
-  {{#full-map class="flex-grow" buses=sortedActiveBuses viewName="myabc" as |map ignore|}}
+  {{#full-map class="flex-grow" buses=sortedActiveBuses viewName="myabc" as |map userLocation|}}
     {{#if map}}
     {{#each sortedActiveBuses as |bus|}}
-      {{info-window bus=bus map=map}}
+      {{info-window bus=bus map=map userLocation=userLocation}}
     {{/each}}
     {{/if}}
   {{/full-map}}
