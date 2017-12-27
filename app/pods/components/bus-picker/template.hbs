@@ -1,0 +1,12 @@
+{{#paper-chips
+  readOnly=readOnly
+  removeItem=(action "removeBus")
+  addItem=(action "addBus")
+  placeholder="Add a bus"
+  content=selectedBuses
+  options=remainingBuses
+  searchField="route"
+  requireMatch=true as |item|}}
+  <strong>{{item.route}}</strong>
+  <em>{{item.direction}}</em>
+{{/paper-chips}}
