@@ -27,7 +27,7 @@
     {{if debug.isActive 'TrackBusesTask is running'}}
   {{/unless}}
   {{!-- <span class="flex"></span> --}}
-  {{bus-picker class="flex" selectedBuses=(readonly _requestedBuses) addBus=(action 'addBus') removeBus=(action 'removeBus')}}
+  {{bus-picker class="flex-grow" selectedBuses=(readonly _requestedBuses) addBus=(action 'addBus') removeBus=(action 'removeBus')}}
   {{#paper-subheader onClick=(action 'activateDebugMode')}}Last updated at: {{if globals.lastPolledAt (moment-format globals.lastPolledAt 'LTS') 'Never'}}{{/paper-subheader}}
 </div>
 
