@@ -1,13 +1,13 @@
 import Component from '@ember/component';
 import { A as emberA} from '@ember/array';
-import { computed } from '@ember/object';
-// import EObj from '@ember/object';
+import { computed, get } from '@ember/object';
+import EObj from '@ember/object';
 import { fetchJson } from '../../../utils/fetch';
 
-// const busObj = EObj.extend({
-//   route: null,
-//   direction: null,
-// });
+const busObj = EObj.extend({
+  route: null,
+  direction: null,
+});
 
 export default Component.extend({
   // tagName: '',
@@ -22,7 +22,7 @@ export default Component.extend({
     get() {
       const allBuses = this.get('allBuses');
       const selectedBuses = this.get('selectedBuses');
-      return allBuses.filter(b => !selectedBuses.any(_b => _b===b))
+      return allBuses.filter(b => !selectedBuses.any(_b => get(_b, 'route')==get(b,'route') && get(_b,'direction')==get(b,'direction')))
     }
   }),
 
@@ -30,7 +30,7 @@ export default Component.extend({
     const url = `/transit-app/assets/all-buses.json`;
     try {
       let buses = await fetchJson(url);
-      buses = buses.map(b =>({
+      buses = buses.map(b =>busObj.create({
         route: parseInt(b.route),
         direction: String(b.direction).toLowerCase()
       }));
