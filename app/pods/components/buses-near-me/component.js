@@ -20,17 +20,19 @@ export default Component.extend({
   tagName: 'buses-near-me',
   classNames: ['layout-column', 'flex-grow'],
   busURL: `${padding}http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus`,
-  _requestedBuses: [
-    [16, ["southbound"]],
-    [99, ["northbound"]],
-    [109, ["northbound"]],
-    
-  ].reduce((a,c) => 
-    a.concat({
-      route: c[0],
-      direction: c[1],
-    })
-  , emberArray()),
+  _requestedBuses: computed({
+    get() {
+      const cache = window.localStorage.getItem('requestedBuses');
+      let returnable = JSON.parse(cache);
+      returnable = Array.isArray(returnable) && returnable || emberArray();
+      return returnable;
+    },
+    set(key, value) {
+      const newValue = JSON.stringify(value);
+      window.localStorage.setItem('requestedBuses', newValue);
+      return this.get('_requestedBuses');
+    }
+  }),
   requestedBuses: computed('_requestedBuses.[]', {
     get() {
       const hash = {};
@@ -172,10 +174,14 @@ export default Component.extend({
     },
 
     addBus(bus) {
-      this.get('_requestedBuses').pushObject(bus);
+      const arr = emberArray(this.get('_requestedBuses'));
+      arr.pushObject(bus);
+      this.set('_requestedBuses', arr);
     },
     removeBus(bus) {
-      this.get('_requestedBuses').removeObject(bus);
+      const arr = emberArray(this.get('_requestedBuses'));
+      arr.removeObject(bus);
+      this.set('_requestedBuses', arr);      
     },
     
     activateDebugMode() {
