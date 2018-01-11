@@ -8,8 +8,9 @@ import { alias, bool, reads, sort } from '@ember/object/computed';
 import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
 import { isGeoLocValid } from '../../../utils/gps-helper';
+import config  from 'ember-get-config';
 
-const padding = 'https://people.cs.clemson.edu/~rchowda/cors/?';
+const padding =  config&& config.environment==="development"&&"https://people.cs.clemson.edu/~rchowda/cors_2/?"||'https://people.cs.clemson.edu/~rchowda/cors/?';
 
 const initialArray = () => emberArray();
 

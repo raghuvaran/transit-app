@@ -1,6 +1,7 @@
 import $ from 'jquery';
+import config  from 'ember-get-config';
 
-const key = 'AIzaSyDUZ_JoVs7XrbCBNofu4QqfTO5HzefbUdk';
+const key = config&& config.environment==="development"&&"AIzaSyDxkP6K5lh2VBZUVLMZW4YqvwseeDIb-PI"||'AIzaSyDUZ_JoVs7XrbCBNofu4QqfTO5HzefbUdk';
 export function initialize(appInstance) {
   // appInstance.inject('route', 'foo', 'service:foo');
   const geoloc = appInstance.lookup('service:geoloc');
