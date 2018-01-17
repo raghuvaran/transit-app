@@ -9,6 +9,8 @@ const busObj = EObj.extend({
   direction: null,
 });
 
+const ALL_BUSES_URL = `assets/all-buses.json`;
+
 export default Component.extend({
   // tagName: '',
   init() {
@@ -27,9 +29,8 @@ export default Component.extend({
   }),
 
   async getAllBuses() {
-    const url = `/transit-app/assets/all-buses.json`;
     try {
-      let buses = await fetchJson(url);
+      let buses = await fetchJson(ALL_BUSES_URL);
       buses = buses.map(b =>busObj.create({
         route: parseInt(b.route),
         direction: String(b.direction).toLowerCase()
