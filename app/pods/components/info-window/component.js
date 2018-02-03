@@ -2,6 +2,10 @@ import Component from '@ember/component';
 import $ from 'jquery';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
+import SHAPES from '../../../utils/shapes';
+import { fetchJson } from '../../../utils/fetch';
+
+const markerSVG = '/assets/252025.svg';
 
 export default Component.extend({
   globals: inject(),
@@ -12,6 +16,7 @@ export default Component.extend({
     const window = new google.maps.InfoWindow({
       content: `<div id="${windowId}"></div>`,
     });
+    this.getShape();
     this.set('windowId', windowId);
     this.set('window', window);
   },
@@ -23,6 +28,7 @@ export default Component.extend({
     const markerListener = this.get('markerListener');
     marker && marker.setMap(null);
     google.maps.event.removeListener(markerListener);
+    this.get('shape').setMap(null);
     
     console.log("Destroying marker ", this.get('bus.route'));
   },
@@ -49,10 +55,28 @@ export default Component.extend({
     const label = this.get('bus.markerLabel');
     const windowId = this.get('windowId');
     const window = this.get('window');
+    const color = this.get('bus.color');
+    const defaultMarker = this.get('globals.defaultMarker')
+
+    const markerIcon = {
+      url: markerSVG,
+      scaledSize: new google.maps.Size(80, 80),
+      origin: new google.maps.Point(0, 0),
+      anchor: new google.maps.Point(32,65),
+      labelOrigin: new google.maps.Point(40,33)
+    };
+
     const marker = new google.maps.Marker({
+      animation: google.maps.Animation.DROP,
       position: latLng,
       map: map,
-      label,
+      label: {
+        text: label,
+        color,
+        fontSize: "16px",
+        fontWeight: "bold"
+      },
+      icon: defaultMarker?markerIcon:null
     });
 
     this.set('marker', marker);
@@ -65,6 +89,20 @@ export default Component.extend({
     this.set('markerListener', markerListener);
     
     $(`#${windowId}`)[0].append($(`#${this.get('elementId')}`)[0]);
+  },
+
+  async getShape() {
+    const shapes = await fetchJson(SHAPES[this.get('bus.route')]);
+    const color = this.get('bus.color')
+    const routeShape = new google.maps.Polyline({
+      path: shapes,
+      geodesic: true,
+      strokeColor: color,
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+    this.set('shape', routeShape);
+    routeShape.setMap(this.get('map'));
   }
 });
 

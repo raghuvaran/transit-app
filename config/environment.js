@@ -31,23 +31,28 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+    ENV.proxyURL = "https://people.cs.clemson.edu/~rchowda/cors_2/?";
+    ENV.googleMapsKey = "AIzaSyDxkP6K5lh2VBZUVLMZW4YqvwseeDIb-PI";
   }
-
+  
   if (environment === 'test') {
     // Testem prefers this...
     ENV.locationType = 'none';
-
+    
     // keep test console output quieter
     ENV.APP.LOG_ACTIVE_GENERATION = false;
     ENV.APP.LOG_VIEW_LOOKUPS = false;
-
+    
     ENV.APP.rootElement = '#ember-testing';
   }
-
+  
   if (environment === 'production') {
     // here you can enable a production-specific feature
+    
     ENV.rootURL = '/transit-app';
     ENV.locationType = 'hash';
+    ENV.proxyURL = "https://people.cs.clemson.edu/~rchowda/cors/?";
+    ENV.googleMapsKey = "AIzaSyDUZ_JoVs7XrbCBNofu4QqfTO5HzefbUdk";
   }
 
   return ENV;

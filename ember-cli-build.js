@@ -8,6 +8,13 @@ module.exports = function(defaults) {
     // Add options here
   });
 
+  if (app.env === "production") {
+    app.options.fingerprint.enabled = true;
+    app.options.fingerprint.prepend = "/transit-app";
+    app.options.fingerprint.extensions = app.options.fingerprint.extensions.concat(['json', 'svg']);
+  }
+
+
   // Use `app.import` to add additional libraries to the generated
   // output files.
   //

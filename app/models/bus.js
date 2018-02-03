@@ -3,6 +3,8 @@ import { computed } from '@ember/object';
 import { getDistanceFromLatLonInMiles } from 'transit-app/utils/gps-helper';
 import { URLGenerator } from 'transit-app/utils/fetch';
 import Notification from 'transit-app/utils/notification';
+import ColorGenerator from '../utils/color-generator';
+import config  from 'ember-get-config';
 
 const roundOff = (value, precision) => Math.round((value) * Math.pow(10, precision))/ Math.pow(10, precision);
 
@@ -18,7 +20,7 @@ const staticmap = size => ({get(){
       `size:tiny|color:red|${this.get('userLat')},${this.get('userLng')}`,
       `color:red|${this.get('lat')},${this.get('lng')}`,
     ],
-    key: 'AIzaSyDUZ_JoVs7XrbCBNofu4QqfTO5HzefbUdk'
+    key: config.googleMapsKey
 
   });
   // const blob = await fetchBlob(url);
@@ -66,6 +68,10 @@ export default EmberObject.extend({
       return parseFloat(this.get('distanceAwayFromUser')) <= this.get('notifyAtLeastDistance');
     }
   }),
+
+  color: computed({get() {
+    return ColorGenerator();
+  }}),
 
   directionIcon: computed('direction', {
   get(){

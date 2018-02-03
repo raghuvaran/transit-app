@@ -8,8 +8,9 @@ import { alias, bool, reads, sort } from '@ember/object/computed';
 import { task, timeout } from 'ember-concurrency';
 import { fetchJson } from 'transit-app/utils/fetch';
 import { isGeoLocValid } from '../../../utils/gps-helper';
+import config  from 'ember-get-config';
 
-const padding = 'https://people.cs.clemson.edu/~rchowda/cors/?';
+const URLPrefix =  config.proxyURL;
 
 const initialArray = () => emberArray();
 
@@ -19,7 +20,7 @@ export default Component.extend({
   debug: inject('debugger-log'),
   tagName: 'buses-near-me',
   classNames: ['layout-column', 'flex-grow'],
-  busURL: `${padding}http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus`,
+  busURL: `${URLPrefix}http://developer.itsmarta.com/BRDRestService/RestBusRealTimeService/GetAllBus`,
   _requestedBuses: computed({
     get() {
       const cache = window.localStorage.getItem('requestedBuses');

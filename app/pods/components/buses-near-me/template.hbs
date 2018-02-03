@@ -35,7 +35,7 @@
     {{#if locationInvalid}}
       {{#paper-subheader}}Couldn't get your location{{/paper-subheader}}
     {{else}}
-      {{#paper-subheader}}Current location: {{globals.currentLocation.latitude}}, {{globals.currentLocation.longitude}}{{/paper-subheader}} 
+      {{#paper-subheader}}Current location: {{globals.currentLocation.lat}}, {{globals.currentLocation.lng}}{{/paper-subheader}} 
     {{/if}}
     <span class="flex"></span>
     {{paper-button onClick=(action 'forceGetCurrentPosition') label="Retry"}}
