@@ -6,9 +6,6 @@ const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 module.exports = function(defaults) {
   let app = new EmberApp(defaults, {
     // Add options here
-    fingerprint: {
-      // exclude: ['all-buses.json']
-    }
   });
 
   if (app.env === "production") {
@@ -30,6 +27,12 @@ module.exports = function(defaults) {
   // modules that you would like to import into your application
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
+
+  if (app.env === "production") {
+    app.options.fingerprint.enabled = true;
+    app.options.fingerprint.prepend = "/transit-app/";
+    app.options.fingerprint.extensions = app.options.fingerprint.extensions.concat(['json']);
+  }
 
   return app.toTree();
 };

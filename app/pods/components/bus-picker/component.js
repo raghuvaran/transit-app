@@ -9,7 +9,7 @@ const busObj = EObj.extend({
   direction: null,
 });
 
-const ALL_BUSES_URL = '/assets/all-buses.json';
+const ALL_BUSES_URL = `assets/all-buses.json`;
 
 export default Component.extend({
   // tagName: '',
@@ -29,9 +29,8 @@ export default Component.extend({
   }),
 
   async getAllBuses() {
-    const url = ALL_BUSES_URL;
     try {
-      let buses = await fetchJson(url);
+      let buses = await fetchJson(ALL_BUSES_URL);
       buses = buses.map(b =>busObj.create({
         route: parseInt(b.route),
         direction: String(b.direction).toLowerCase()
