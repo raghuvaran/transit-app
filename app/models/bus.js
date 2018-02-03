@@ -1,5 +1,6 @@
 import EmberObject from '@ember/object';
 import { computed } from '@ember/object';
+import { A as emberArray } from '@ember/array';
 import { getDistanceFromLatLonInMiles } from 'transit-app/utils/gps-helper';
 import { URLGenerator } from 'transit-app/utils/fetch';
 import Notification from 'transit-app/utils/notification';
@@ -23,10 +24,10 @@ const staticmap = size => ({get(){
     key: config.googleMapsKey
 
   });
-  // const blob = await fetchBlob(url);
-  // const imgUrl = window.URL.createObjectURL(blob);
   return url;
 }});
+
+const initialArray = () => emberArray();
 
 export default EmberObject.extend({
   /* Attributes */
@@ -48,6 +49,11 @@ export default EmberObject.extend({
   notifyAtLeastDistance: 1, // in miles
   precision: 2,
   latLngUpdatedAt: null,
+  
+  init() {
+    this._super(...arguments);
+    this.set('distanceQueue', initialArray());
+  },
 
   /* Computed properties */
   latLng: computed('lat', 'lng', {
@@ -63,9 +69,17 @@ export default EmberObject.extend({
     return coordArray.every(v => !!v) && getDistanceFromLatLonInMiles(userLat, userLng, lat, lng);
   }}),
 
+  isApproaching: computed('distanceAwayFromUser', {get() {
+    const currentDistance = this.get('distanceAwayFromUser');
+    const lastDistance = this.get('distanceQueue.lastObject');
+    currentDistance && this.get('distanceQueue').pushObject(currentDistance);
+    return currentDistance<lastDistance;
+  }}),
+
   shouldNotify: computed('distanceAwayFromUser', 'notifyAtLeastDistance', {
     get() {
-      return parseFloat(this.get('distanceAwayFromUser')) <= this.get('notifyAtLeastDistance');
+      const distanceAwayFromUser = this.get('distanceAwayFromUser');
+      return parseFloat(distanceAwayFromUser) <= this.get('notifyAtLeastDistance');
     }
   }),
 
@@ -91,7 +105,7 @@ distanceText: computed('distanceAwayFromUser', {
 }),
 
 notify: function() {
-  if(this.get('shouldNotify')) {
+  if(this.get('shouldNotify') && this.get('isApproaching')) {
     const title = `Route ${this.get('route')} (${this.get('direction')})`;
     const body = `Bus is ${this.get('distanceText')} from you`;
     const image = this.get('staticMapImg');
@@ -103,69 +117,15 @@ notify: function() {
   }
 }.observes('distanceAwayFromUser'),
 
-// _marker: computed('isMapThere', {
-//   get() {
-//     if(this.get('isMapThere')) {
-//       const latLng= this.get('latLng'), map = this.get('mapObj');
-//       const label = this.get('markerLabel');
-//       return new google.maps.Marker({
-//         position: latLng,
-//         map: map,
-//         label,
-//       });
-//     }
-//   }
-// }),
-
 markerLabel: computed('route', 'direction', {
   get() {
     return `${this.get('route')}`;
   }
 }),
 
-// infoWindow: computed('_marker', {
-//   get() {
-//     const marker = this.get('_marker');
-//     const map = this.get('mapObj');
-//     if(this.get('isMapThere') && marker) {
-//       const content = this.get('infoWindowContent');
-//       const window = new google.maps.InfoWindow({
-//         content,
-//       });
-//       window.open(map, marker);
-//       return window;
-//     }
-//   }
-// }),
-
-
-// infoWindowContent: computed('distanceText', 'latLngUpdatedAt', {
-//   get() {
-//       const distanceText = this.get('distanceText');
-//       const latLngUpdatedAt = this.get('latLngUpdatedAt');
-//       return `
-//       <h3>${distanceText}</h3>
-//       <p>${moment(latLngUpdatedAt).format('LTS')}</p>
-//       `;
-//   } 
-// }),
-
-// markerFunc: function() {
-//   const marker = this.get('_marker');
-//   if(marker) {
-//     const latLng = this.get('latLng');
-//     const infoWindow = this.get('infoWindow');
-//     const infoWindowContent = this.get('infoWindowContent');
-//     marker.setPosition(latLng);
-//     infoWindow.setContent(infoWindowContent);
-//   }
-  
-// }.observes('latLngUpdatedAt'),
-
 staticmapFullImg: computed('distanceAwayFromUser', staticmap('640x640')),
 
 staticMapImg: computed('distanceAwayFromUser', staticmap('423x227')),
-
 
 setLatLng({lat, lng}) {
   const oldLat = this.get('lat');
