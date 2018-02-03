@@ -3,12 +3,13 @@ import { A as emberA} from '@ember/array';
 import { computed, get } from '@ember/object';
 import EObj from '@ember/object';
 import { fetchJson } from '../../../utils/fetch';
-import config  from 'ember-get-config';
 
 const busObj = EObj.extend({
   route: null,
   direction: null,
 });
+
+const ALL_BUSES_URL = '/assets/all-buses.json';
 
 export default Component.extend({
   // tagName: '',
@@ -28,7 +29,7 @@ export default Component.extend({
   }),
 
   async getAllBuses() {
-    const url = config&&config.environment=="development"&&"/assets/all-buses.json"||`/transit-app/assets/all-buses.json`;
+    const url = ALL_BUSES_URL;
     try {
       let buses = await fetchJson(url);
       buses = buses.map(b =>busObj.create({
