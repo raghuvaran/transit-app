@@ -3,6 +3,7 @@ import { computed } from '@ember/object';
 import { getDistanceFromLatLonInMiles } from 'transit-app/utils/gps-helper';
 import { URLGenerator } from 'transit-app/utils/fetch';
 import Notification from 'transit-app/utils/notification';
+import ColorGenerator from '../utils/color-generator';
 
 const roundOff = (value, precision) => Math.round((value) * Math.pow(10, precision))/ Math.pow(10, precision);
 
@@ -66,6 +67,10 @@ export default EmberObject.extend({
       return parseFloat(this.get('distanceAwayFromUser')) <= this.get('notifyAtLeastDistance');
     }
   }),
+
+  color: computed({get() {
+    return ColorGenerator();
+  }}),
 
   directionIcon: computed('direction', {
   get(){
