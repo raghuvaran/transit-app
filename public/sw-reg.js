@@ -1,5 +1,5 @@
 if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js', { scope: '/' }).then(function(reg) {
+  navigator.serviceWorker.register('sw.js', { scope: '/transit-app/' }).then(function(reg) {
     if(reg.installing) {
       console.info('Service worker installing');
     } else if(reg.waiting) {
