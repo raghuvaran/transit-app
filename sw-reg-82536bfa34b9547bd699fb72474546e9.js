@@ -1,0 +1,1 @@
+"serviceWorker"in navigator&&navigator.serviceWorker.register("/transit-app/sw-d0b826527c210a90c315e7720e5dffea.js",{scope:"/"}).then(function(e){e.installing?console.info("Service worker installing"):e.waiting?console.info("Service worker installed"):e.active&&console.info("Service worker active")}).catch(function(e){console.error("Registration failed with "+e)})
