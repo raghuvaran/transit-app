@@ -1,7 +1,15 @@
 export default class Notification {
-  static create() {
-    return (this.hasAccess() || this.requestPermission(()=>new window.Notification(...arguments))) &&
-     new window.Notification(...arguments);
+  static async create(title, options) {
+    options.timestamp = Date.now();
+    if(this.hasAccess() || (await this.requestPermission()) && this.hasAccess()) {
+      try{
+        const reg = await navigator.serviceWorker.ready;
+        reg.showNotification(title, options);
+      } catch(e) {
+        console.warn('Failed to showNotification via service worker');
+        new window.Notification(title, options);
+      }
+    }
   }
 
   static hasAccess() {
@@ -11,7 +19,6 @@ export default class Notification {
   }
 
   static requestPermission(callback){
-    window.Notification.requestPermission().then(_ => this.hasAccess() && typeof callback === "function" && callback());
-    return this.hasAccess();
+    return window.Notification.requestPermission();
   }
 }
