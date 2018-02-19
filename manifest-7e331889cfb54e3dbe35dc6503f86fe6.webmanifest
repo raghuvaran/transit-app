@@ -1,0 +1,53 @@
+{
+  "name": "Transit app",
+  "short_name": "TA",
+  "start_url": "/transit-app/",
+  "display": "fullscreen",
+  "theme_color": "white",
+  "background_color": "#0e0e0e",
+  "orientation": "portrait",
+  "lang": "en-US",
+  "description": "A simple app to show nearby MARTA buses.",
+  "icons": [
+    {
+      "src": "/transit-app/assets/icons/icon-72x72-699aed1b65b8afda32ce41c273135c8c.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/transit-app/assets/icons/icon-96x96-3ee85609711853ee0bcae1172379f199.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/transit-app/assets/icons/icon-128x128-e793f1db8c7dfcfdc3993bc7e16a0176.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/transit-app/assets/icons/icon-144x144-28d7ac0301f310895e9e6bfe9910da7b.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/transit-app/assets/icons/icon-152x152-f6737914a2a24e9fa7132e4612629db8.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/transit-app/assets/icons/icon-192x192-32fa93ceca4771b060db059d96e8162c.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/transit-app/assets/icons/icon-384x384-5542b10b0f04613e95310fec8e50cdfb.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/transit-app/assets/icons/icon-512x512-c997f3318785f2b96c3127f6e6a534d9.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
