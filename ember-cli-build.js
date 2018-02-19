@@ -24,7 +24,7 @@ module.exports = function(defaults) {
   if (app.env === "production") {
     app.options.fingerprint.enabled = true;
     app.options.fingerprint.prepend = "/transit-app/";
-    app.options.fingerprint.extensions = app.options.fingerprint.extensions.concat(['json', 'svg']);
+    app.options.fingerprint.extensions = app.options.fingerprint.extensions.concat(['json', 'svg', 'webmanifest']);
     app.options.fingerprint.replaceExtensions = app.options.fingerprint.replaceExtensions.concat(['webmanifest']);
   }
 
