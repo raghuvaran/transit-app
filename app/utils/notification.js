@@ -4,6 +4,8 @@ export default class Notification {
     if(this.hasAccess() || (await this.requestPermission()) && this.hasAccess()) {
       try{
         const reg = await navigator.serviceWorker.ready;
+        const currentNotifications = await reg.getNotifications();
+        this.closeExiting(currentNotifications, options);
         reg.showNotification(title, options);
       } catch(e) {
         console.warn('Failed to showNotification via service worker');
@@ -11,6 +13,13 @@ export default class Notification {
       }
     }
   }
+
+  static closeExiting(notifications, {tag}={}){
+    if(notifications.length === 0) return;
+    notifications.forEach(notification => {
+      notification.tag === tag && notification.close()
+    });
+  } 
 
   static hasAccess() {
     if(window.Notification.permission === "granted") return true;
