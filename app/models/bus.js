@@ -109,10 +109,11 @@ notify: function() {
     const title = `Route ${this.get('route')} (${this.get('direction')})`;
     const body = `Bus is ${this.get('distanceText')} from you`;
     const image = this.get('staticMapImg'), icon=image;
+    const tag = this.get('blockAbbr');
     try {
       const notification = this.get('notification');
       notification && notification.close && notification.close();
-      this.set('notification', Notification.create(title,{body, image, icon}));
+      this.set('notification', Notification.create(title,{body, image, icon, tag}));
     } catch(e) {
       console.error('Failed to create notification', e);
     }

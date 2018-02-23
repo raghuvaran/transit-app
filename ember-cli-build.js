@@ -25,6 +25,7 @@ module.exports = function(defaults) {
     app.options.fingerprint.enabled = true;
     app.options.fingerprint.prepend = "/transit-app/";
     app.options.fingerprint.extensions = app.options.fingerprint.extensions.concat(['json', 'svg']);
+    app.options.fingerprint.replaceExtensions = app.options.fingerprint.replaceExtensions.concat(['json']);
   }
 
   return app.toTree();
