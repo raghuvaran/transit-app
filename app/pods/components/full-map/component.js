@@ -33,7 +33,7 @@ export default Component.extend({
   userLocation: computed('globals.currentLocation', {
     get() {
       const {lat, lng} = this.get('globals.currentLocation');
-      const map = this.get('map')
+      const map = this.get('map');
       let marker = this.get('userMarker');
       if(!marker){
         marker = new google.maps.Marker({

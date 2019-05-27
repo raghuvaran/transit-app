@@ -1,4 +1,5 @@
 import Component from '@ember/component';
+import jQuery from 'jquery';
 // import { htmlSafe } from '@ember/string';
 export default Component.extend({
   tagName:'bus-card',
@@ -7,7 +8,7 @@ export default Component.extend({
 
   actions:{
     openFullMap() {
-      this.set('dialogOrigin', $(event.currentTarget));
+      this.set('dialogOrigin', jQuery(event.currentTarget));
       this.set('showDialog', true);
     },
     
