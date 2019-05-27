@@ -10,7 +10,7 @@ function fetch(URL, options) {
     let headers = new Headers({
       "Content-Type": "application/json",
       // "X-CSRF-Token": $('meta[name="csrf-token"]').attr("content"),
-    })
+    });
     options.headers = headers;
   }
   return window.fetch(URL, options).then(status);
@@ -46,7 +46,7 @@ function serializeParams(params, prefix){
 }
 
 function URLGenerator(baseURL, params){
-  return baseURL.endsWith('?') ? baseURL + serializeParams(params) : baseURL + '?' + serializeParams(params)
+  return baseURL.endsWith('?') ? baseURL + serializeParams(params) : baseURL + '?' + serializeParams(params);
 }
 
 export { fetchJson, fetchBlob, serializeParams, URLGenerator };

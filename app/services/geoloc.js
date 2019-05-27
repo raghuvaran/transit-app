@@ -12,7 +12,7 @@ const watchPosition = function(){
 
 const getCurrentPosition = function() {
   navigator.geolocation.getCurrentPosition(...arguments);
-}
+};
 
 /**
  * @module Services

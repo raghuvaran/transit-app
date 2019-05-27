@@ -24,7 +24,7 @@ export default Component.extend({
     get() {
       const allBuses = this.get('allBuses');
       const selectedBuses = this.get('selectedBuses');
-      return allBuses.filter(b => !selectedBuses.any(_b => get(_b, 'route')==get(b,'route') && get(_b,'direction')==get(b,'direction')))
+      return allBuses.filter(b => !selectedBuses.any(_b => get(_b, 'route')==get(b,'route') && get(_b,'direction')==get(b,'direction')));
     }
   }),
 

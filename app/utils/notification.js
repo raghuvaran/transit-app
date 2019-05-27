@@ -17,7 +17,7 @@ export default class Notification {
   static closeExiting(notifications, {tag}={}){
     if(notifications.length === 0) return;
     notifications.forEach(notification => {
-      notification.tag === tag && notification.close()
+      notification.tag === tag && notification.close();
     });
   } 
 

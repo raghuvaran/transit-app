@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import $ from 'jquery';
+import jQuery from 'jquery';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import SHAPES from '../../../utils/shapes';
@@ -56,7 +56,7 @@ export default Component.extend({
     const windowId = this.get('windowId');
     const window = this.get('window');
     const color = this.get('bus.color');
-    const defaultMarker = this.get('globals.defaultMarker')
+    const defaultMarker = this.get('globals.defaultMarker');
 
     const markerIcon = {
       url: markerSVG,
@@ -88,12 +88,12 @@ export default Component.extend({
 
     this.set('markerListener', markerListener);
     
-    $(`#${windowId}`)[0].append($(`#${this.get('elementId')}`)[0]);
+    jQuery(`#${windowId}`)[0].append(jQuery(`#${this.get('elementId')}`)[0]);
   },
 
   async getShape() {
     const shapes = await fetchJson(SHAPES[this.get('bus.route')]);
-    const color = this.get('bus.color')
+    const color = this.get('bus.color');
     const routeShape = new google.maps.Polyline({
       path: shapes,
       geodesic: true,
@@ -108,7 +108,7 @@ export default Component.extend({
 
 
 function computeDiff(past) {
-  const ranges = ['seconds', 'minutes', 'hours', 'days', 'weeks', 'months', 'years']
+  const ranges = ['seconds', 'minutes', 'hours', 'days', 'weeks', 'months', 'years'];
   let diff;
   for(const range of ranges) {
     diff = moment().diff(past, range, true);
@@ -119,5 +119,5 @@ function computeDiff(past) {
 }
 
 function precision(value) {
-  return value && Math.round((value) * Math.pow(10, 2))/ Math.pow(10, 2)
+  return value && Math.round((value) * Math.pow(10, 2))/ Math.pow(10, 2);
 }
