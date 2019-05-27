@@ -25,7 +25,7 @@ module.exports = function(deployTarget) {
   ENV.git = {
     repo: 'git@github.com:raghuvaran/transit-app.git',
     branch: 'gh-pages',
-    worktreePath: '/master',
+    worktreePath: '/tmp/transit-app-master',
     commitMessage: 'Deployed %@'
   };
 
