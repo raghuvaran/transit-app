@@ -35,4 +35,4 @@ jobs:
     - name: Deploy to production
       env:
         SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-      run: yarn deploy:prod
+      run: git config user.email "deploy@chowda.in" && git config user.name "Deploy bot" && yarn deploy:prod
