@@ -6,13 +6,14 @@ module.exports = {
   },
   extends: 'eslint:recommended',
   env: {
-    browser: true
+    browser: true,
+    es6: true
   },
   rules: {
     "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
     "no-console": ["error", { allow: ["warn", "error", "info"] }],
     "no-fallthrough": ["error", { "commentPattern": "break[\\s\\w]*omitted" }],
-    "semi": ["warn", "always", { "omitLastInOneLineBlock": true}],
+    "semi": ["warn", "always", { "omitLastInOneLineBlock": true }],
     "no-extra-semi": "off"
   },
   globals: {
