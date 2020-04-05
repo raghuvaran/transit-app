@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import { A as emberA} from '@ember/array';
+import { A as emberA } from '@ember/array';
 import { computed, get } from '@ember/object';
 import EObj from '@ember/object';
 import { fetchJson } from '../../../utils/fetch';
@@ -24,19 +24,19 @@ export default Component.extend({
     get() {
       const allBuses = this.get('allBuses');
       const selectedBuses = this.get('selectedBuses');
-      return allBuses.filter(b => !selectedBuses.any(_b => get(_b, 'route')==get(b,'route') && get(_b,'direction')==get(b,'direction')));
+      return allBuses.filter(b => !selectedBuses.any(_b => get(_b, 'route') == get(b, 'route') && get(_b, 'direction') == get(b, 'direction')));
     }
   }),
 
   async getAllBuses() {
     try {
       let buses = await fetchJson(ALL_BUSES_URL);
-      buses = buses.map(b =>busObj.create({
+      buses = buses.map(b => busObj.create({
         route: parseInt(b.route),
         direction: String(b.direction).toLowerCase()
       }));
       this.set('allBuses', buses);
-    } catch(e) { console.error('Failed to fetch all-buses.json')}
+    } catch (e) { console.error('Failed to fetch all-buses.json') }
   },
   actions: {
     addBus(bus) {
@@ -45,14 +45,14 @@ export default Component.extend({
       //   selectedBuses.push(bus);
       //   this.set('selectedBuses', selectedBuses);
       // }
-      if(this.get('addBus')) return this.sendAction('addBus', bus);
+      if (typeof this.get('addBus') === 'function') return this.get('addBus')(bus);
       this.get('selectedBuses').pushObject(bus);
     },
     removeBus(bus) {
       // const selectedBuses = this.get('selectedBuses');
       // const newSelection = selectedBuses.filter(b => b !== bus);
       // this.set('selectedBuses', newSelection);
-      if(this.get('removeBus')) return this.sendAction('removeBus', bus);
+      if (typeof this.get('removeBus') === 'function') return this.get('removeBus')(bus);
       this.get('selectedBuses').removeObject(bus);
     }
   }

@@ -1,41 +1,43 @@
-{{#paper-content class="layout-column flex-grow" padding=true}}
-{{#if debug.isActive}}
-<div class="layout-row flex-5">
-  <div class="layout-column flex-grow">
-    <div class="layout-row layout-align-start-center">
-    {{#paper-subheader}}Debugger log{{/paper-subheader}}
-    {{#paper-button iconButton=true onClick=(action 'clearDebugLog')}}{{paper-icon "clear all"}}{{/paper-button}}
-    <span class="flex"></span>
-    {{#paper-button iconButton=true onClick=(action 'deactivateDebugMode')}}{{paper-icon "close"}}{{/paper-button}}
+<md-content class="md-default-theme md-padding layout-column flex-grow">
+  {{#if debug.isActive}}
+  <div class="layout-row flex-5">
+    <div class="layout-column flex-grow">
+      <div class="layout-row layout-align-start-center">
+        {{#paper-subheader}}Debugger log{{/paper-subheader}}
+        {{#paper-button iconButton=true onClick=(action 'clearDebugLog')}}{{paper-icon "clear all"}}{{/paper-button}}
+        <span class="flex"></span>
+        {{#paper-button iconButton=true onClick=(action 'deactivateDebugMode')}}{{paper-icon "close"}}{{/paper-button}}
+      </div>
+      <ul class="break-word overflow-y-auto">
+        {{#each debug.log as |dl|}}
+        <li {{action 'popDebugLog' dl}}>{{dl}}</li>
+        {{/each}}
+      </ul>
     </div>
-    <ul class="break-word overflow-y-auto">
-      {{#each debug.log as |dl|}}
-          <li {{action 'popDebugLog' dl}}>{{dl}}</li>
-      {{/each}}
-    </ul>
   </div>
-</div>
-{{/if}}
+  {{/if}}
 
-<div class="layout-row flex-none">
-  {{#unless trackBusesTask.isRunning}}
+  <div class="layout-row flex-none">
+    {{#unless trackBusesTask.isRunning}}
     {{#paper-button class="flex-none" raised=true fab=true onClick=(perform trackBusesTask)}}{{paper-icon 'play arrow'}}{{/paper-button}}
     {{if debug.isActive 'TrackBusesTask is stopped'}}
-  {{else}}
+    {{else}}
     {{#paper-button class="flex-none" raised=true fab=true onClick=(action 'canceltrackBusesTask')}}{{paper-icon 'stop'}}{{/paper-button}}
     {{if debug.isActive 'TrackBusesTask is running'}}
-  {{/unless}}
-  {{bus-picker class="flex-grow" selectedBuses=(readonly _requestedBuses) addBus=(action 'addBus') removeBus=(action 'removeBus')}}
-  {{#paper-subheader onClick=(action 'activateDebugMode')}}Last updated at: {{if globals.lastPolledAt (moment-format globals.lastPolledAt 'LTS') 'Never'}}{{/paper-subheader}}
-</div>
+    {{/unless}}
+    {{bus-picker class="flex-grow" selectedBuses=(readonly _requestedBuses) addBus=(action 'addBus') removeBus=(action 'removeBus')}}
+    {{#paper-subheader onClick=(action 'activateDebugMode')}}Last updated at:
+    {{if globals.lastPolledAt (moment-format globals.lastPolledAt 'LTS') 'Never'}}{{/paper-subheader}}
+  </div>
 
 
   {{#if (or debug.isActive locationInvalid)}}
   <div class="layout-row flex-none">
     {{#if locationInvalid}}
-      {{#paper-subheader}}Couldn't get your location{{/paper-subheader}}
+    {{#paper-subheader}}Couldn't get your location{{/paper-subheader}}
     {{else}}
-      {{#paper-subheader}}Current location: {{globals.currentLocation.lat}}, {{globals.currentLocation.lng}}{{/paper-subheader}} 
+    {{#paper-subheader}}Current location: {{globals.currentLocation.lat}},
+    {{globals.currentLocation.lng}}{{/paper-subheader}}
     {{/if}}
     <span class="flex"></span>
     {{paper-button onClick=(action 'forceGetCurrentPosition') label="Retry"}}
@@ -43,5 +45,5 @@
   {{/if}}
 
   {{yield sortedActiveBuses}}
-  
-{{/paper-content}}
+
+</md-content>

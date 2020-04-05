@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import jQuery from 'jquery';
 import { computed } from '@ember/object';
 import { inject } from '@ember/service';
 import SHAPES from '../../../utils/shapes';
@@ -29,7 +28,7 @@ export default Component.extend({
     marker && marker.setMap(null);
     google.maps.event.removeListener(markerListener);
     this.get('shape').setMap(null);
-    
+
     console.log("Destroying marker ", this.get('bus.route'));
   },
 
@@ -37,12 +36,12 @@ export default Component.extend({
     get() {
       const latLngUpdatedAt = this.get('bus.latLngUpdatedAt');
       this.get('globals.lastPolledAt');
-      if(!latLngUpdatedAt) return;
+      if (!latLngUpdatedAt) return;
       const marker = this.get('marker');
-      if(!marker) {
+      if (!marker) {
         this.setMarker();
       } else {
-        const latLng= this.get('bus.latLng');
+        const latLng = this.get('bus.latLng');
         marker.setPosition(latLng);
       }
       return computeDiff(latLngUpdatedAt);
@@ -50,8 +49,8 @@ export default Component.extend({
   }),
 
   setMarker() {
-    const map = this.get('map');    
-    const latLng= this.get('bus.latLng');
+    const map = this.get('map');
+    const latLng = this.get('bus.latLng');
     const label = this.get('bus.markerLabel');
     const windowId = this.get('windowId');
     const window = this.get('window');
@@ -62,8 +61,8 @@ export default Component.extend({
       url: markerSVG,
       scaledSize: new google.maps.Size(80, 80),
       origin: new google.maps.Point(0, 0),
-      anchor: new google.maps.Point(32,65),
-      labelOrigin: new google.maps.Point(40,33)
+      anchor: new google.maps.Point(32, 65),
+      labelOrigin: new google.maps.Point(40, 33)
     };
 
     const marker = new google.maps.Marker({
@@ -76,19 +75,27 @@ export default Component.extend({
         fontSize: "16px",
         fontWeight: "bold"
       },
-      icon: defaultMarker?markerIcon:null
+      icon: defaultMarker ? markerIcon : null
     });
 
     this.set('marker', marker);
-    
+
     window.open(map, marker);
-    const markerListener = marker.addListener('click', function() {
+    const markerListener = marker.addListener('click', function () {
       window.open(map, marker);
     });
 
     this.set('markerListener', markerListener);
-    
-    jQuery(`#${windowId}`)[0].append(jQuery(`#${this.get('elementId')}`)[0]);
+    // marker is added to dom on next tick
+    setTimeout(() => {
+      const markerElement = document.getElementById(windowId);
+      const infoWindowElement = document.getElementById(this.get('elementId'));
+      if (markerElement && infoWindowElement) {
+        markerElement.append(infoWindowElement);
+      } else {
+        console.error(`Failed to append {{info-window}} to marker`, { markerElement, infoWindowElement });
+      }
+    });
   },
 
   async getShape() {
@@ -110,14 +117,14 @@ export default Component.extend({
 function computeDiff(past) {
   const ranges = ['seconds', 'minutes', 'hours', 'days', 'weeks', 'months', 'years'];
   let diff;
-  for(const range of ranges) {
+  for (const range of ranges) {
     diff = moment().diff(past, range, true);
     diff = precision(diff);
-    if(diff < 60) return `${diff} ${range} ago`;
+    if (diff < 60) return `${diff} ${range} ago`;
   }
   return `${diff} years ago`;
 }
 
 function precision(value) {
-  return value && Math.round((value) * Math.pow(10, 2))/ Math.pow(10, 2);
+  return value && Math.round((value) * Math.pow(10, 2)) / Math.pow(10, 2);
 }

@@ -12,8 +12,8 @@ export default Component.extend({
   init() {
     this._super(...arguments);
     window.initMap()
-    .done(_ => this.initMap())
-    .fail(_ => console.error('Failed to fetch the google maps script'));
+    .then(_ => this.initMap())
+    .catch(_ => console.error('Failed to fetch the google maps script'));
     
   },
   

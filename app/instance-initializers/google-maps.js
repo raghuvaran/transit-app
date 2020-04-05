@@ -1,5 +1,5 @@
-import jQuery from 'jquery';
 import config  from 'ember-get-config';
+import { getScript } from '../utils/get-script';
 
 const key = config.googleMapsKey;
 export function initialize(appInstance) {
@@ -8,7 +8,7 @@ export function initialize(appInstance) {
   
   // application.inject('route', 'foo', 'service:foo');
   geoloc.forceGetCurrentPosition({lat: '33.766856', lng: '-84.367541'});
-  window.initMap = function() { return jQuery.getScript(`https://maps.googleapis.com/maps/api/js?key=${key}`) };
+  window.initMap = function() { return getScript(`https://maps.googleapis.com/maps/api/js?key=${key}`) };
 }
 
 export default {
