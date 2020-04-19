@@ -63,6 +63,8 @@ export default Component.extend({
     this._super(...arguments);
     const watchId = this.get('geoloc').subscribe();
     this.set('geoWatchId', watchId);
+    // perform the task on init
+    if(this.get('_requestedBuses.length') > 0) this.get('trackBusesTask').perform();
   },
 
   willDestroy(){
@@ -178,11 +180,27 @@ export default Component.extend({
       const arr = emberArray(this.get('_requestedBuses'));
       arr.pushObject(bus);
       this.set('_requestedBuses', arr);
+      // start tracking the buses if not yet started
+      if(!this.get('trackBusesTask.isRunning')) this.get('trackBusesTask').perform();
     },
     removeBus(bus) {
       const arr = emberArray(this.get('_requestedBuses'));
       arr.removeObject(bus);
-      this.set('_requestedBuses', arr);      
+      this.set('_requestedBuses', arr);
+      // destroy active bus objects that belong to the current route(bus) that is being removed
+      const newActiveBuses = initialArray();
+      for(const activeBus of this.get('activeBuses')) {
+        if(
+          activeBus.get('direction') == bus.get('direction') &&
+          activeBus.get('route') == bus.get('route')) {
+            activeBus.destroy();
+          } else {
+            newActiveBuses.push(activeBus);
+          }
+      }
+      this.set('activeBuses', newActiveBuses);
+      // stop the task when no buses are being tracked
+      if(arr.get('length') < 1) this.get('trackBusesTask').cancelAll();
     },
     
     activateDebugMode() {
